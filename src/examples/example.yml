@@ -13,5 +13,6 @@ usage:
         - kotlin-docker-build/build-service:
             project-directory: services/helloservice
   workflows:
-    kotlin-docker-build/build-service-with-vm:
-      project-directory: services/helloservice
+    jobs:
+      kotlin-docker-build/build-service-with-vm:
+        project-directory: services/helloservice
