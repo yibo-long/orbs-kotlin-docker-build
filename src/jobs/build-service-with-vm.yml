@@ -1,9 +1,8 @@
 description: >
   Build a subproject with VM instead of inside a container, which is required for a project with testcontainers.
 
-executor:
-  machine: true
-  resource_class: <<parameters.resource_class>>
+machine: true
+resource_class: <<parameters.resource_class>>
 
 parameters:
   resource_class:

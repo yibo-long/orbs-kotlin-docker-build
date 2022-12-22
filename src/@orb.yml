@@ -1,7 +1,7 @@
 version: 2.1
 
 description: >
-  Build a subproject within a Kotlin Gradle monorepo.
+  Build a subproject within a Kotlin Gradle monorepo, and potentially push the docker image to registry.
 # What will your orb allow users to accomplish?
 # Descriptions should be short, simple, and informative.
 
