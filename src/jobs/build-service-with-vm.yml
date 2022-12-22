@@ -28,6 +28,7 @@ parameters:
     description: Which checksum file to use to build gradle cache.
   current-branch:
     type: string
+    default: ""
     description: Current running branch.
 
 steps:
