@@ -1,0 +1,35 @@
+description: >
+  Build a subproject with VM instead of inside a container, which is required for a project with testcontainers.
+
+executor:
+  machine: true
+  resource_class: <<parameters.resource_class>>
+
+parameters:
+  resource_class:
+    type: enum
+    default: medium
+    description: Specify the resource class for VM
+    enum:
+      - medium
+      - large
+      - xlarge
+      - 2xlarge
+  project-directory:
+    type: string
+    description: |
+      Where the subproject within the Gradle monorepo project is. Note gradlew should be in the root directory.
+  jdk-version:
+    type: string
+    default: "17"
+    description: Select the JDK version from AWS Corretto.
+  cache-checksum-file:
+    type: string
+    default: "build.gradle.kts"
+    description: Which checksum file to use to build gradle cache.
+
+steps:
+  - build-service:
+      project-directory: <<parameters.project-directory>>
+      jdk-version: <<parameters.jdk-version>>
+      cache-checksum-file: <<parameters.cache-checksum-file>>
