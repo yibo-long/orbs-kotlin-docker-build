@@ -26,9 +26,13 @@ parameters:
     type: string
     default: "build.gradle.kts"
     description: Which checksum file to use to build gradle cache.
+  current-branch:
+    type: string
+    description: Current running branch.
 
 steps:
   - build-service:
       project-directory: <<parameters.project-directory>>
       jdk-version: <<parameters.jdk-version>>
       cache-checksum-file: <<parameters.cache-checksum-file>>
+      current-branch: <<current-branch>>

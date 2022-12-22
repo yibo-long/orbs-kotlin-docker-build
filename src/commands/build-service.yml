@@ -13,6 +13,10 @@ parameters:
     type: string
     default: "build.gradle.kts"
     description: Which checksum file to use to build gradle cache.
+  current-branch:
+    type: string
+    description: Current running branch.
+
 steps:
   - checkout
   - run:
@@ -43,7 +47,7 @@ steps:
             working_directory: .
         - when:
             condition:
-              equal: [main, << pipeline.git.branch >>]
+              equal: [main, <<parameters.current-branch>>]
             steps:
               - run:
                   name: Push image to registry on main branch
