@@ -21,7 +21,7 @@ steps:
   - checkout
   - run:
       name: Install JDK <<parameters.jdk-version>>
-      environments:
+      environment:
         JDK_VERSION: <<parameters.jdk-version>>
       command: <<include(scripts/install-jdk.sh)>>
   - gradle/with_cache:
