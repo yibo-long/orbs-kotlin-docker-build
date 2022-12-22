@@ -17,6 +17,8 @@ steps:
   - checkout
   - run:
       name: Install JDK <<parameters.jdk-version>>
+      environments:
+        JDK_VERSION: <<parameters.jdk-version>>
       command: <<include(scripts/install-jdk.sh)>>
   - gradle/with_cache:
       deps_checksum_file: <<parameters.cache-checksum-file>>
