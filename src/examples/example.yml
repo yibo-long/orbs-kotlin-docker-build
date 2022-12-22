@@ -14,7 +14,8 @@ usage:
             project-directory: services/helloservice
             current-branch: << pipeline.git.branch >>
   workflows:
-    jobs:
-      kotlin-docker-build/build-service-with-vm:
-        project-directory: services/helloservice
-        current-branch: << pipeline.git.branch >>
+    build-helloservice:
+      jobs:
+        kotlin-docker-build/build-service-with-vm:
+          project-directory: services/helloservice
+          current-branch: << pipeline.git.branch >>
