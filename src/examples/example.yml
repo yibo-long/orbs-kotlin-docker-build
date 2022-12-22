@@ -1,13 +1,21 @@
 description: >
-  Sample example description.
-# Provide a use-case based example for using this orb.
-# Everything in the `usage` section will be displayed in the orb registry.
-# Comments are not retained.
+  Either use command `kotlin-docker-build/build-service` or workflow `kotlin-docker-build/build-service-with-vm` to
+  build the service.
 usage:
   version: 2.1
   orbs:
-    <orb-name>: <namespace>/<orb-name>@1.2.3
+    kotlin-docker-build: yibolong/kotlin-docker-build@0.0.1
+  jobs:
+    build-helloservice:
+      resource_class: medium
+      machine: true
+      steps:
+        - kotlin-docker-build/build-service:
+            project-directory: services/helloservice
+            current-branch: << pipeline.git.branch >>
   workflows:
-    use-my-orb:
+    build-helloservice:
       jobs:
-        - <orb-name>/<job-name>
+        - kotlin-docker-build/build-service-with-vm:
+            project-directory: services/helloservice
+            current-branch: << pipeline.git.branch >>

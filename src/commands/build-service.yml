@@ -1,0 +1,55 @@
+description: >
+  Run commands to build, test and optionally deploy a subproject.
+parameters:
+  project-directory:
+    type: string
+    description: |
+      Where the subproject within the Gradle monorepo project is. Note gradlew should be in the root directory.
+  jdk-version:
+    type: string
+    default: "17"
+    description: Select the JDK version from AWS Corretto.
+  cache-checksum-file:
+    type: string
+    default: "build.gradle.kts"
+    description: Which checksum file to use to build gradle cache.
+  current-branch:
+    type: string
+    description: Current running branch.
+
+steps:
+  - checkout
+  - run:
+      name: Install JDK <<parameters.jdk-version>>
+      environments:
+        JDK_VERSION: <<parameters.jdk-version>>
+      command: <<include(scripts/install-jdk.sh)>>
+  - gradle/with_cache:
+      deps_checksum_file: <<parameters.cache-checksum-file>>
+      steps:
+        - run:
+            name: Test and build
+            command: |
+              ./gradlew -p "<<parameters.project-directory>>" detekt koverReport sonarqube --info
+            working_directory: .
+        - store_test_results:
+            path: <<parameters.project-directory>>/build/test-results
+        - run:
+            name: Login Docker
+            command: |
+              docker login -u="${ORG_GRADLE_PROJECT_artifactory_user}" \
+                -p="${ORG_GRADLE_PROJECT_artifactory_password}" \
+                spanio.jfrog.io
+            working_directory: .
+        - run:
+            name: Build docker image
+            command: ./gradlew -p "<<parameters.project-directory>>" dockerBuild
+            working_directory: .
+        - when:
+            condition:
+              equal: [main, <<parameters.current-branch>>]
+            steps:
+              - run:
+                  name: Push image to registry on main branch
+                  command: ./gradlew -p "<<parameters.project-directory>>" dockerPush
+                  working_directory: .
